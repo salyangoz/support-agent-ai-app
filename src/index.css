@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+/*
+ * Premium Design Tokens — Refined Industrial
+ * Theme: Neutral/Emerald + Dark Sidebar
+ * Font loaded via index.html <link>
+ */
+
+@theme {
+  /* Brand palette — Emerald */
+  --color-brand-50: #ecfdf5;
+  --color-brand-100: #d1fae5;
+  --color-brand-200: #a7f3d0;
+  --color-brand-300: #6ee7b7;
+  --color-brand-400: #34d399;
+  --color-brand-500: #10b981;
+  --color-brand-600: #059669;
+  --color-brand-700: #047857;
+  --color-brand-800: #065f46;
+  --color-brand-900: #064e3b;
+  --color-brand-950: #022c22;
+
+  /* Semantic colors */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Ticket state colors */
+  --color-state-open: #3b82f6;
+  --color-state-pending: #f59e0b;
+  --color-state-resolved: #22c55e;
+  --color-state-closed: #6b7280;
+
+  /* Draft status colors */
+  --color-draft-pending: #f59e0b;
+  --color-draft-approved: #22c55e;
+  --color-draft-rejected: #ef4444;
+  --color-draft-sent: #3b82f6;
+
+  /* Role colors */
+  --color-role-owner: #8b5cf6;
+  --color-role-admin: #3b82f6;
+  --color-role-member: #6b7280;
+
+  /* UI chrome — light mode */
+  --color-background: #f9fafb;
+  --color-foreground: #111827;
+  --color-card: #ffffff;
+  --color-card-foreground: #111827;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #111827;
+  --color-primary: #059669;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f3f4f6;
+  --color-secondary-foreground: #111827;
+  --color-muted: #f3f4f6;
+  --color-muted-foreground: #6b7280;
+  --color-accent: #ecfdf5;
+  --color-accent-foreground: #064e3b;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #fafafa;
+  --color-border: #e5e7eb;
+  --color-input: #d1d5db;
+  --color-ring: #059669;
+  --radius: 0.625rem;
+
+  /* Layout tokens */
+  --sidebar-width: 15.5rem;
+  --sidebar-collapsed-width: 4rem;
+  --header-height: 3.5rem;
+
+  /* Light sidebar */
+  --color-sidebar: #ffffff;
+  --color-sidebar-foreground: #111827;
+  --color-sidebar-border: #e5e7eb;
+  --color-sidebar-accent: #f3f4f6;
+  --color-sidebar-accent-foreground: #111827;
+  --color-sidebar-ring: #059669;
+}
+
+body {
+  margin: 0;
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-feature-settings: 'ss01', 'ss02';
+  letter-spacing: -0.011em;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+/* Custom shadow utilities */
+.shadow-elevated {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03),
+              0 1px 3px rgba(0, 0, 0, 0.06),
+              0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-float {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03),
+              0 4px 8px rgba(0, 0, 0, 0.06),
+              0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* Emerald glow for focus states */
+.glow-emerald,
+.focus-glow:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand-500) 20%, transparent),
+              0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-color: var(--color-brand-500);
+  outline: none;
+}
