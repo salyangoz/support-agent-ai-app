@@ -64,7 +64,7 @@ export default function DraftsPage() {
       ) : (
         <div className="space-y-4">
           {drafts_list.map((draft) => (
-            <div key={draft.id} className="rounded-lg border p-4">
+            <div key={draft.id} className="rounded-lg border bg-card p-4">
               <div className="mb-2 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Badge

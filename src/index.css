@@ -1,117 +1,106 @@
 @import "tailwindcss";
 
 /*
- * Premium Design Tokens — Refined Industrial
- * Theme: Neutral/Emerald + Dark Sidebar
- * Font loaded via index.html <link>
+ * Design Tokens — Yengec Design Language
+ * Primary: Blue #096fa0 | Secondary: Red #f33c42 | Coral: #f58e3d
+ * Font: Oxygen | Background: Raindrop White #f6f5f3
  */
 
 @theme {
-  /* Brand palette — Emerald */
-  --color-brand-50: #ecfdf5;
-  --color-brand-100: #d1fae5;
-  --color-brand-200: #a7f3d0;
-  --color-brand-300: #6ee7b7;
-  --color-brand-400: #34d399;
-  --color-brand-500: #10b981;
-  --color-brand-600: #059669;
-  --color-brand-700: #047857;
-  --color-brand-800: #065f46;
-  --color-brand-900: #064e3b;
-  --color-brand-950: #022c22;
+  /* Brand palette — Yengec Blue */
+  --color-brand-50: #e8f8ff;
+  --color-brand-100: #bbd3de;
+  --color-brand-200: #8eb8cc;
+  --color-brand-300: #5e9ab8;
+  --color-brand-400: #2e7da5;
+  --color-brand-500: #096fa0;
+  --color-brand-600: #085479;
+  --color-brand-700: #063f5a;
+  --color-brand-800: #042a3c;
+  --color-brand-900: #14252f;
+  --color-brand-950: #0a1318;
+
+  /* Secondary — Yengec Red */
+  --color-yengec-red: #f33c42;
+  --color-yengec-red-light: #fff1ea;
+  --color-yengec-coral: #f58e3d;
 
   /* Semantic colors */
-  --color-success: #22c55e;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
-  --color-info: #3b82f6;
+  --color-success: #379595;
+  --color-warning: #f27411;
+  --color-error: #c7353a;
+  --color-info: #096fa0;
 
   /* Ticket state colors */
-  --color-state-open: #3b82f6;
-  --color-state-pending: #f59e0b;
-  --color-state-resolved: #22c55e;
-  --color-state-closed: #6b7280;
+  --color-state-open: #096fa0;
+  --color-state-pending: #f27411;
+  --color-state-resolved: #379595;
+  --color-state-closed: #787878;
 
   /* Draft status colors */
-  --color-draft-pending: #f59e0b;
-  --color-draft-approved: #22c55e;
-  --color-draft-rejected: #ef4444;
-  --color-draft-sent: #3b82f6;
+  --color-draft-pending: #f27411;
+  --color-draft-approved: #379595;
+  --color-draft-rejected: #c7353a;
+  --color-draft-sent: #096fa0;
 
   /* Role colors */
-  --color-role-owner: #8b5cf6;
-  --color-role-admin: #3b82f6;
-  --color-role-member: #6b7280;
+  --color-role-owner: #096fa0;
+  --color-role-admin: #f58e3d;
+  --color-role-member: #787878;
 
-  /* UI chrome — light mode */
-  --color-background: #f9fafb;
-  --color-foreground: #111827;
+  /* UI chrome — Yengec light theme */
+  --color-background: #f6f5f3;
+  --color-foreground: #2b2a2a;
   --color-card: #ffffff;
-  --color-card-foreground: #111827;
+  --color-card-foreground: #2b2a2a;
   --color-popover: #ffffff;
-  --color-popover-foreground: #111827;
-  --color-primary: #059669;
+  --color-popover-foreground: #2b2a2a;
+  --color-primary: #096fa0;
   --color-primary-foreground: #ffffff;
-  --color-secondary: #f3f4f6;
-  --color-secondary-foreground: #111827;
-  --color-muted: #f3f4f6;
-  --color-muted-foreground: #6b7280;
-  --color-accent: #ecfdf5;
-  --color-accent-foreground: #064e3b;
-  --color-destructive: #ef4444;
-  --color-destructive-foreground: #fafafa;
-  --color-border: #e5e7eb;
-  --color-input: #d1d5db;
-  --color-ring: #059669;
+  --color-secondary: #f6f5f3;
+  --color-secondary-foreground: #2b2a2a;
+  --color-muted: #f6f5f3;
+  --color-muted-foreground: #787878;
+  --color-accent: #e8f8ff;
+  --color-accent-foreground: #14252f;
+  --color-destructive: #c7353a;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #ecebeb;
+  --color-input: #ecebeb;
+  --color-ring: #096fa0;
   --radius: 0.625rem;
 
   /* Layout tokens */
-  --sidebar-width: 15.5rem;
+  --sidebar-width: 16rem;
   --sidebar-collapsed-width: 4rem;
   --header-height: 3.5rem;
 
-  /* Light sidebar */
+  /* Light sidebar — Yengec style */
   --color-sidebar: #ffffff;
-  --color-sidebar-foreground: #111827;
-  --color-sidebar-border: #e5e7eb;
-  --color-sidebar-accent: #f3f4f6;
-  --color-sidebar-accent-foreground: #111827;
-  --color-sidebar-ring: #059669;
+  --color-sidebar-foreground: #2b2a2a;
+  --color-sidebar-border: #ecebeb;
+  --color-sidebar-accent: #f6f5f3;
+  --color-sidebar-accent-foreground: #2b2a2a;
+  --color-sidebar-ring: #096fa0;
 }
 
 body {
   margin: 0;
-  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  font-family: 'Oxygen', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-background);
   color: var(--color-foreground);
-  font-feature-settings: 'ss01', 'ss02';
-  letter-spacing: -0.011em;
+  font-size: 0.875rem;
 }
 
 * {
   border-color: var(--color-border);
 }
 
-/* Custom shadow utilities */
-.shadow-elevated {
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03),
-              0 1px 3px rgba(0, 0, 0, 0.06),
-              0 4px 12px rgba(0, 0, 0, 0.04);
-}
-
-.shadow-float {
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03),
-              0 4px 8px rgba(0, 0, 0, 0.06),
-              0 12px 32px rgba(0, 0, 0, 0.08);
-}
-
-/* Emerald glow for focus states */
-.glow-emerald,
+/* Focus glow — Yengec blue */
 .focus-glow:focus-visible {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand-500) 20%, transparent),
-              0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 0 3px rgba(9, 111, 160, 0.2);
   border-color: var(--color-brand-500);
   outline: none;
 }

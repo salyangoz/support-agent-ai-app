@@ -38,10 +38,8 @@ export function Sidebar() {
   return (
     <aside className="flex h-full w-[var(--sidebar-width)] flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
       <div className="flex h-[var(--header-height)] items-center gap-2.5 px-5">
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-600">
-          <span className="text-xs font-bold text-white">S</span>
-        </div>
-        <span className="text-sm font-semibold tracking-tight">Support AI</span>
+        <img src="/logo-icon.svg" alt="Yengec" className="h-7 w-7" />
+        <span className="text-sm font-bold tracking-tight">Support AI</span>
       </div>
 
       <nav className="flex-1 space-y-0.5 px-3 pt-2">
@@ -52,9 +50,9 @@ export function Sidebar() {
             end={item.end}
             className={({ isActive }) =>
               cn(
-                'group relative flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium transition-all duration-150',
+                'group relative flex items-center gap-3 rounded-[10px] px-3 py-2 text-[13px] font-bold transition-all duration-200',
                 isActive
-                  ? 'bg-brand-50 text-brand-700'
+                  ? 'bg-[#fff1ea] text-[#f33c42]'
                   : 'text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground',
               )
             }
@@ -62,9 +60,9 @@ export function Sidebar() {
             {({ isActive }) => (
               <>
                 {isActive && (
-                  <span className="absolute left-0 top-1/2 h-4 w-[2px] -translate-y-1/2 rounded-r-full bg-brand-600" />
+                  <span className="absolute left-0 top-1/2 h-4 w-[2px] -translate-y-1/2 rounded-r-full bg-[#f33c42]" />
                 )}
-                <item.icon className={cn('h-4 w-4', isActive && 'text-brand-600')} />
+                <item.icon className={cn('h-4 w-4', isActive && 'text-[#f33c42]')} />
                 {item.label}
               </>
             )}
@@ -81,9 +79,9 @@ export function Sidebar() {
                 to={`/t/${tenantId}/${item.to}`}
                 className={({ isActive }) =>
                   cn(
-                    'group relative flex items-center gap-3 rounded-lg px-3 py-2 text-[13px] font-medium transition-all duration-150',
+                    'group relative flex items-center gap-3 rounded-[10px] px-3 py-2 text-[13px] font-bold transition-all duration-200',
                     isActive
-                      ? 'bg-brand-50 text-brand-700'
+                      ? 'bg-[#fff1ea] text-[#f33c42]'
                       : 'text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground',
                   )
                 }
@@ -91,9 +89,9 @@ export function Sidebar() {
                 {({ isActive }) => (
                   <>
                     {isActive && (
-                      <span className="absolute left-0 top-1/2 h-4 w-[2px] -translate-y-1/2 rounded-r-full bg-brand-600" />
+                      <span className="absolute left-0 top-1/2 h-4 w-[2px] -translate-y-1/2 rounded-r-full bg-[#f33c42]" />
                     )}
-                    <item.icon className={cn('h-4 w-4', isActive && 'text-brand-600')} />
+                    <item.icon className={cn('h-4 w-4', isActive && 'text-[#f33c42]')} />
                     {item.label}
                   </>
                 )}

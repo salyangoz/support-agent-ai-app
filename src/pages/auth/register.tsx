@@ -35,7 +35,7 @@ export default function RegisterPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">
-            <span className="text-brand-600">Create Account</span>
+            <img src="/logo.svg" alt="Yengec" className="mx-auto h-10" />
           </CardTitle>
           <CardDescription>Sign up and start managing your AI support agent</CardDescription>
         </CardHeader>

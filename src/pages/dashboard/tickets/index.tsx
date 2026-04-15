@@ -59,7 +59,7 @@ export default function TicketsPage() {
         <div className="py-12 text-center text-muted-foreground">No tickets found.</div>
       ) : (
         <>
-          <div className="rounded-lg border">
+          <div className="rounded-lg border bg-card">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b bg-muted/50">

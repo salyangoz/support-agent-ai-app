@@ -144,7 +144,7 @@ export default function KnowledgeBasePage() {
         </div>
       ) : (
         <>
-          <div className="rounded-lg border">
+          <div className="rounded-lg border bg-card">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b bg-muted/50">

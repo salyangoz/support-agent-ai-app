@@ -53,6 +53,9 @@ export default function TicketDetailPage() {
   if (isLoading) return <div className="flex justify-center p-12"><Spinner /></div>
   if (!ticket) return <div className="py-12 text-center text-muted-foreground">Ticket not found</div>
 
+  const lastMessage = ticketMessages.length > 0 ? ticketMessages[ticketMessages.length - 1] : null
+  const lastReplyIsAgent = lastMessage?.author_role === 'agent' || lastMessage?.author_role === 'bot'
+
   return (
     <div>
       <PageHeader
@@ -62,9 +65,9 @@ export default function TicketDetailPage() {
             <Link to={`/t/${tenantId}/tickets`}>
               <Button variant="outline" size="sm"><ArrowLeft className="mr-2 h-4 w-4" /> Back</Button>
             </Link>
-            <Button size="sm" onClick={() => generateDraft.mutate()} disabled={generateDraft.isPending}>
+            <Button size="sm" onClick={() => generateDraft.mutate()} disabled={generateDraft.isPending || lastReplyIsAgent}>
               <Sparkles className="mr-2 h-4 w-4" />
-              {generateDraft.isPending ? 'Generating...' : 'Generate Draft'}
+              {generateDraft.isPending ? 'Generating...' : lastReplyIsAgent ? 'Awaiting Customer Reply' : 'Generate Draft'}
             </Button>
           </div>
         }

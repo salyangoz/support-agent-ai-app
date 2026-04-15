@@ -128,7 +128,7 @@ describe('Ticket Detail', () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /generate draft/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /generate draft|awaiting customer/i })).toBeInTheDocument()
     })
   })
 

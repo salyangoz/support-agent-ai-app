@@ -123,7 +123,7 @@ export default function UsersPage() {
       {isLoading ? (
         <div className="flex justify-center p-12"><Spinner /></div>
       ) : (
-        <div className="rounded-lg border">
+        <div className="rounded-lg border bg-card">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b bg-muted/50">

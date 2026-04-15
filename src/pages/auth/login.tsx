@@ -33,7 +33,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">
-            <span className="text-brand-600">Support AI</span>
+            <img src="/logo.svg" alt="Yengec" className="mx-auto h-10" />
           </CardTitle>
           <CardDescription>Sign in to manage your support agent</CardDescription>
         </CardHeader>

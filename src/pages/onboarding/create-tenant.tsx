@@ -63,7 +63,7 @@ export default function CreateTenantPage() {
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">
             <span className="text-brand-600">
-              {showForm ? 'Create Company' : 'Support AI'}
+              {showForm ? 'Create Company' : <img src="/logo.svg" alt="Yengec" className="mx-auto h-10" />}
             </span>
           </CardTitle>
           <CardDescription>
