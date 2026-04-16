@@ -34,7 +34,18 @@ function extractAnswer(answer: ChatResponse['answer']): string {
 }
 
 function stripUrls(text: string): string {
-  return text.replace(/https?:\/\/[^\s)}\]]+/g, '').replace(/\n{3,}/g, '\n\n').trim()
+  return text
+    .replace(/\[(?:Image|image|img)\s+"[^"]*"\]/g, '')
+    .replace(/!\[[^\]]*\]\([^)]+\)/g, '')
+    .replace(/\[[^\]]*\]\(https?:\/\/[^)]+\)/g, (match) => {
+      const label = match.match(/\[([^\]]*)\]/)?.[1]
+      return label || ''
+    })
+    .replace(/https?:\/\/[^\s)}\]"]+/g, '')
+    .replace(/www\.[^\s)}\]"]+/g, '')
+    .replace(/[^\s]{60,}/g, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
 }
 
 export default function ChatPage() {
@@ -145,9 +156,9 @@ export default function ChatPage() {
                           ? 'rounded-br-sm bg-primary text-primary-foreground'
                           : 'rounded-bl-sm bg-muted'
                       }`}
-                      style={{ overflowWrap: 'anywhere' }}
+                      style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}
                     >
-                      <p className="whitespace-pre-wrap text-sm">{stripUrls(msg.content)}</p>
+                      <div className="prose prose-sm max-w-none overflow-hidden [&>*:first-child]:mt-0 [&>*:last-child]:mb-0" dangerouslySetInnerHTML={{ __html: stripUrls(msg.content) }} />
                       {msg.sources && msg.sources.length > 0 && (
                         <div className="mt-2.5 border-t border-border/30 pt-2">
                           <p className="mb-1 flex items-center gap-1 text-[11px] font-medium text-muted-foreground">

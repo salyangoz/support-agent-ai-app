@@ -68,14 +68,6 @@ describe('Settings – General tab', () => {
     })
   })
 
-  it('shows webhook URL with tenant slug', async () => {
-    renderSettings()
-
-    await waitFor(() => {
-      const webhookInput = screen.getByDisplayValue(/\/api\/webhooks\/test-company\//)
-      expect(webhookInput).toBeInTheDocument()
-    })
-  })
 
   it('can save tenant name', async () => {
     const user = userEvent.setup()

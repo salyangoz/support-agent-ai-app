@@ -25,7 +25,7 @@ const TabsList = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
     <div
       ref={ref}
       className={cn(
-        'inline-flex items-center gap-1 rounded-lg bg-muted p-1',
+        'flex border-b bg-card rounded-t-[20px] px-2 pt-1',
         className,
       )}
       role="tablist"
@@ -51,10 +51,10 @@ const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(
         aria-selected={isActive}
         onClick={() => ctx.onValueChange(value)}
         className={cn(
-          'rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-200',
+          '-mb-px px-4 py-2.5 text-sm font-bold transition-all duration-200 border-b-2',
           isActive
-            ? 'bg-card text-brand-500 font-bold shadow-sm'
-            : 'text-muted-foreground hover:text-foreground',
+            ? 'border-brand-500 text-brand-500'
+            : 'border-transparent text-muted-foreground hover:text-foreground',
           className,
         )}
         {...props}
@@ -76,7 +76,7 @@ const TabsContent = forwardRef<HTMLDivElement, TabsContentProps>(
       <div
         ref={ref}
         role="tabpanel"
-        className={cn('pt-6', className)}
+        className={cn('', className)}
         {...props}
       />
     )

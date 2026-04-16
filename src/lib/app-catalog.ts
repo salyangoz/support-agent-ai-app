@@ -39,6 +39,7 @@ export const APP_CATALOG: Record<string, AppDefinition> = {
       { key: 'clientSecret', label: 'Client Secret', placeholder: 'Enter your client secret', type: 'password', required: true, helpText: 'Used for webhook signature verification (HMAC-SHA1)' },
     ],
     configFields: [
+      { key: 'admin_id', label: 'Admin ID', placeholder: '1234567', type: 'text', required: true, helpText: 'Intercom admin ID used to send replies. Find it in Intercom → Settings → Teammates.' },
       { key: 'send_as_note', label: 'Send as internal note', placeholder: '', type: 'checkbox', helpText: 'Send replies as internal notes instead of customer-visible messages' },
     ],
   },
@@ -53,6 +54,8 @@ export const APP_CATALOG: Record<string, AppDefinition> = {
     category: 'knowledge',
     credentials: [
       { key: 'token', label: 'Personal Access Token', placeholder: 'ghp_...', type: 'password', required: true, helpText: 'Needs read access to the repository contents' },
+    ],
+    configFields: [
       { key: 'owner', label: 'Repository Owner', placeholder: 'myorg', type: 'text', required: true },
       { key: 'repo', label: 'Repository Name', placeholder: 'docs', type: 'text', required: true },
       { key: 'path', label: 'Path', placeholder: 'guides/', type: 'text', required: true, helpText: 'Directory path to scan for .md files' },

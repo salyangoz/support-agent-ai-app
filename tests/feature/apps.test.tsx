@@ -110,15 +110,21 @@ describe('App Form - New', () => {
     expect(screen.getByLabelText(/client secret/i)).toBeInTheDocument()
   })
 
-  it('shows GitHub credential fields when code=github in URL', async () => {
+  it('shows GitHub credential and config fields', async () => {
     seedAuth()
+    const user = userEvent.setup()
     renderInRoute(`/t/:tenantId/apps/new`, <AppFormPage />, `/t/${TENANT_ID}/apps/new?code=github`)
 
     await waitFor(() => {
       expect(screen.getByLabelText(/personal access token/i)).toBeInTheDocument()
     })
-    expect(screen.getByLabelText(/repository owner/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/repository name/i)).toBeInTheDocument()
+
+    await user.click(screen.getByRole('tab', { name: /configuration/i }))
+
+    await waitFor(() => {
+      expect(screen.getByLabelText(/repository owner/i)).toBeInTheDocument()
+      expect(screen.getByLabelText(/repository name/i)).toBeInTheDocument()
+    })
   })
 
   it('marks credential fields as required', async () => {

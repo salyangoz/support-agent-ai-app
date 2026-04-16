@@ -76,6 +76,7 @@ export interface Customer {
   name: string | null
   phone: string | null
   metadata: Record<string, unknown>
+  ticket_count?: number
   created_at: string
   updated_at: string
 }

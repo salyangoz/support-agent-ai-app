@@ -1,12 +1,11 @@
 import { useState, useEffect, type FormEvent } from 'react'
 import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Trash2, CheckCircle2, XCircle, ArrowRight } from 'lucide-react'
+import { Trash2, CheckCircle2, XCircle, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select } from '@/components/ui/select'
-import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { PageHeader } from '@/components/layout/page-header'
 import { Spinner } from '@/components/ui/spinner'
@@ -17,6 +16,47 @@ import type { App } from '@/types/api'
 import { APP_CATALOG, type AppDefinition } from '@/lib/app-catalog'
 
 type TestStatus = 'idle' | 'testing' | 'success' | 'failed'
+
+function CredentialField({ field, value, onChange, isEdit }: {
+  field: import('@/lib/app-catalog').CredentialField
+  value: string
+  onChange: (v: string) => void
+  isEdit: boolean
+}) {
+  const [visible, setVisible] = useState(false)
+  const isSecret = field.type === 'password'
+  const masked = isSecret && isEdit && !visible && value.length > 0
+
+  return (
+    <div className="space-y-1.5">
+      <Label htmlFor={`cred-${field.key}`}>
+        {field.label}
+        {field.required && <span className="ml-1 text-destructive">*</span>}
+      </Label>
+      <div className="relative">
+        <Input
+          id={`cred-${field.key}`}
+          type={masked ? 'password' : 'text'}
+          placeholder={field.placeholder}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          required={field.required}
+          className={isSecret ? 'pr-10' : ''}
+        />
+        {isSecret && value.length > 0 && (
+          <button
+            type="button"
+            onClick={() => setVisible(!visible)}
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-1 text-muted-foreground hover:text-foreground"
+          >
+            {visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          </button>
+        )}
+      </div>
+      {field.helpText && <p className="text-xs text-muted-foreground">{field.helpText}</p>}
+    </div>
+  )
+}
 
 const appRoles: Record<string, string[]> = {
   ticket: ['source', 'destination', 'both'],
@@ -144,7 +184,12 @@ export default function AppFormPage() {
       const missing = def.credentials.filter((f) => f.required && !credentials[f.key]?.trim())
       if (missing.length) { setError(`Required: ${missing.map((f) => f.label).join(', ')}`); return }
     }
-    credentialsMutation.mutate({ code, type: def?.type ?? 'ticket', role, name: name || null, credentials, config, is_active: isActive })
+    credentialsMutation.mutate({
+      code, type: def?.type ?? 'ticket', role, name: name || null,
+      credentials: castFields(credentials, def?.credentials),
+      config: castFields(config, def?.configFields),
+      is_active: isActive,
+    })
   }
 
   const handleConfigSubmit = (e: FormEvent) => {
@@ -154,7 +199,27 @@ export default function AppFormPage() {
       const missing = (def.configFields ?? []).filter((f) => f.required && !config[f.key]?.trim())
       if (missing.length) { setError(`Required: ${missing.map((f) => f.label).join(', ')}`); return }
     }
-    configMutation.mutate({ code, type: def?.type ?? 'ticket', role, name: name || null, credentials, config, is_active: isActive })
+    configMutation.mutate({
+      code, type: def?.type ?? 'ticket', role, name: name || null,
+      credentials: castFields(credentials, def?.credentials),
+      config: castFields(config, def?.configFields),
+      is_active: isActive,
+    })
+  }
+
+  function castFields(values: Record<string, string>, fields?: import('@/lib/app-catalog').CredentialField[]): Record<string, unknown> {
+    const result: Record<string, unknown> = {}
+    for (const [key, val] of Object.entries(values)) {
+      const field = fields?.find((f) => f.key === key)
+      if (field?.type === 'checkbox') {
+        result[key] = val === 'true'
+      } else if (val !== '' && !isNaN(Number(val)) && field?.type === 'text' && /^\d+$/.test(val)) {
+        result[key] = Number(val)
+      } else {
+        result[key] = val
+      }
+    }
+    return result
   }
 
   const updateCredential = (key: string, value: string) => setCredentials((prev) => ({ ...prev, [key]: value }))
@@ -197,8 +262,7 @@ export default function AppFormPage() {
 
         <TabsContent value="credentials">
           <form onSubmit={handleCredentialsSubmit}>
-            <Card>
-              <CardContent className="space-y-4 pt-6">
+            <div className="rounded-b-[20px] border border-t-0 bg-card p-5 space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Display Name</Label>
                   <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder={def?.name ?? 'Optional'} />
@@ -219,15 +283,20 @@ export default function AppFormPage() {
                 )}
 
                 {def && def.credentials.length > 0 && def.credentials.map((field) => (
-                  <div key={field.key} className="space-y-1.5">
-                    <Label htmlFor={`cred-${field.key}`}>
-                      {field.label}
-                      {field.required && <span className="ml-1 text-destructive">*</span>}
-                    </Label>
-                    <Input id={`cred-${field.key}`} type={field.type} placeholder={field.placeholder} value={credentials[field.key] ?? ''} onChange={(e) => updateCredential(field.key, e.target.value)} required={field.required} />
-                    {field.helpText && <p className="text-xs text-muted-foreground">{field.helpText}</p>}
-                  </div>
+                  <CredentialField key={field.key} field={field} value={credentials[field.key] ?? ''} onChange={(v) => updateCredential(field.key, v)} isEdit={isEdit} />
                 ))}
+
+                {isEdit && def?.type === 'ticket' && (
+                  <div className="space-y-2">
+                    <Label>Webhook URL</Label>
+                    <Input
+                      value={`${window.location.origin}/webhooks/${tenantId}/apps/${appId}`}
+                      readOnly
+                      className="font-mono text-xs"
+                    />
+                    <p className="text-xs text-muted-foreground">Configure this URL in your {def?.name} webhook settings</p>
+                  </div>
+                )}
 
                 <div className="flex items-center gap-2">
                   <input type="checkbox" id="is_active" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} className="h-4 w-4 rounded border-input" />
@@ -261,16 +330,14 @@ export default function AppFormPage() {
                     </>
                   )}
                 </div>
-              </CardContent>
-            </Card>
+            </div>
           </form>
         </TabsContent>
 
         {hasConfig && (
           <TabsContent value="configuration">
             <form onSubmit={handleConfigSubmit}>
-              <Card>
-                <CardContent className="space-y-4 pt-6">
+              <div className="rounded-b-[20px] border border-t-0 bg-card p-5 space-y-4">
                   {def!.configFields!.map((field) => (
                     field.type === 'checkbox' ? (
                       <div key={field.key} className="flex items-start gap-2">
@@ -296,8 +363,7 @@ export default function AppFormPage() {
                       {configMutation.isPending ? 'Saving...' : 'Save Configuration'}
                     </Button>
                   </div>
-                </CardContent>
-              </Card>
+              </div>
             </form>
           </TabsContent>
         )}

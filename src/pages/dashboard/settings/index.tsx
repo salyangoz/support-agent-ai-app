@@ -1,7 +1,6 @@
 import { useState, useEffect, type FormEvent } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useParams, useSearchParams } from 'react-router-dom'
-import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -139,8 +138,6 @@ export default function SettingsPage() {
 
   if (isLoading && !activeTenantUser) return <div className="flex justify-center p-12"><Spinner /></div>
 
-  const slug = tenant?.slug ?? activeTenantUser?.tenant?.slug ?? tenantId
-
   return (
     <div>
       <PageHeader title="Settings" description="Configure your tenant and AI agent behavior" />
@@ -159,8 +156,7 @@ export default function SettingsPage() {
 
         <TabsContent value="general">
           <form onSubmit={saveGeneral}>
-            <Card>
-              <CardContent className="space-y-4 pt-6">
+            <div className="rounded-b-[20px] border border-t-0 bg-card p-5 space-y-4">
                 {successTab === 'general' && (
                   <div className="rounded-md bg-success/10 p-3 text-sm text-success">Settings saved successfully.</div>
                 )}
@@ -175,14 +171,6 @@ export default function SettingsPage() {
                     <p className="text-xs text-muted-foreground">Use this key for machine-to-machine API access</p>
                   </div>
                 )}
-                <div className="space-y-2">
-                  <Label>Webhook URL</Label>
-                  <Input
-                    value={`${window.location.origin}/api/webhooks/${slug}/{appId}`}
-                    readOnly
-                    className="font-mono text-xs"
-                  />
-                </div>
                 <div className="space-y-3 border-t pt-4">
                   <div className="flex items-center gap-2">
                     <input
@@ -210,15 +198,13 @@ export default function SettingsPage() {
                     {mutation.isPending ? 'Saving...' : 'Save'}
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
+            </div>
           </form>
         </TabsContent>
 
         <TabsContent value="ai">
           <form onSubmit={saveAI}>
-            <Card>
-              <CardContent className="space-y-5 pt-6">
+            <div className="rounded-b-[20px] border border-t-0 bg-card p-5 space-y-5">
                 {successTab === 'ai' && (
                   <div className="rounded-md bg-success/10 p-3 text-sm text-success">Settings saved successfully.</div>
                 )}
@@ -343,15 +329,13 @@ export default function SettingsPage() {
                     {mutation.isPending ? 'Saving...' : 'Save'}
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
+            </div>
           </form>
         </TabsContent>
 
         <TabsContent value="embedding">
           <form onSubmit={saveEmbedding}>
-            <Card>
-              <CardContent className="space-y-5 pt-6">
+            <div className="rounded-b-[20px] border border-t-0 bg-card p-5 space-y-5">
                 {successTab === 'embedding' && (
                   <div className="rounded-md bg-success/10 p-3 text-sm text-success">Settings saved successfully.</div>
                 )}
@@ -413,15 +397,13 @@ export default function SettingsPage() {
                     {mutation.isPending ? 'Saving...' : 'Save'}
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
+            </div>
           </form>
         </TabsContent>
 
         <TabsContent value="advanced">
           <form onSubmit={saveAdvanced}>
-            <Card>
-              <CardContent className="space-y-4 pt-6">
+            <div className="rounded-b-[20px] border border-t-0 bg-card p-5 space-y-4">
                 {successTab === 'advanced' && (
                   <div className="rounded-md bg-success/10 p-3 text-sm text-success">Settings saved successfully.</div>
                 )}
@@ -452,8 +434,7 @@ export default function SettingsPage() {
                     {mutation.isPending ? 'Saving...' : 'Save'}
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
+            </div>
           </form>
         </TabsContent>
       </Tabs>

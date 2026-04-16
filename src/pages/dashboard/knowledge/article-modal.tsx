@@ -21,7 +21,6 @@ export default function KnowledgeArticleModal({ article, tenantId, onClose }: Pr
     title: article?.title ?? '',
     content: article?.content ?? '',
     category: article?.category ?? '',
-    language: article?.language ?? 'en',
     is_active: article?.is_active ?? true,
   })
   const [error, setError] = useState('')
@@ -47,7 +46,6 @@ export default function KnowledgeArticleModal({ article, tenantId, onClose }: Pr
       title: form.title,
       content: form.content,
       category: form.category || null,
-      language: form.language,
       is_active: form.is_active,
     })
   }
@@ -64,15 +62,9 @@ export default function KnowledgeArticleModal({ article, tenantId, onClose }: Pr
             <Label htmlFor="title">Title</Label>
             <Input id="title" value={form.title} onChange={(e) => update('title', e.target.value)} required />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
-              <Input id="category" value={form.category} onChange={(e) => update('category', e.target.value)} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="language">Language</Label>
-              <Input id="language" value={form.language} onChange={(e) => update('language', e.target.value)} />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="category">Category</Label>
+            <Input id="category" value={form.category} onChange={(e) => update('category', e.target.value)} />
           </div>
           <div className="space-y-2">
             <Label htmlFor="content">Content</Label>

@@ -151,8 +151,7 @@ export default function KnowledgeBasePage() {
                 <tr className="border-b bg-muted/50">
                   <th className="px-4 py-3 text-left font-medium">Title</th>
                   <th className="px-4 py-3 text-left font-medium">Category</th>
-                  <th className="px-4 py-3 text-left font-medium">Language</th>
-                  <th className="px-4 py-3 text-left font-medium">Status</th>
+                    <th className="px-4 py-3 text-left font-medium">Status</th>
                   <th className="px-4 py-3 text-left font-medium">Embedding</th>
                   <th className="px-4 py-3 text-right font-medium">Actions</th>
                 </tr>
@@ -167,7 +166,6 @@ export default function KnowledgeBasePage() {
                     <tr key={article.id} className="border-b last:border-0 hover:bg-muted/30">
                       <td className="px-4 py-3 font-medium">{article.title}</td>
                       <td className="px-4 py-3 text-muted-foreground">{article.category ?? '-'}</td>
-                      <td className="px-4 py-3 text-muted-foreground">{article.language ?? '-'}</td>
                       <td className="px-4 py-3">
                         <Badge variant={article.is_active ? 'success' : 'secondary'}>
                           {article.is_active ? 'Active' : 'Inactive'}

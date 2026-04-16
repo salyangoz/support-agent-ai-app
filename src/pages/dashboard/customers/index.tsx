@@ -48,6 +48,7 @@ export default function CustomersPage() {
                   <th className="px-4 py-3 text-left font-medium">Name</th>
                   <th className="px-4 py-3 text-left font-medium">Email</th>
                   <th className="px-4 py-3 text-left font-medium">Phone</th>
+                  <th className="px-4 py-3 text-left font-medium">Tickets</th>
                   <th className="px-4 py-3 text-left font-medium">Created</th>
                 </tr>
               </thead>
@@ -57,6 +58,7 @@ export default function CustomersPage() {
                     <td className="px-4 py-3 font-medium">{customer.name ?? '-'}</td>
                     <td className="px-4 py-3 text-muted-foreground">{customer.email ?? '-'}</td>
                     <td className="px-4 py-3 text-muted-foreground">{customer.phone ?? '-'}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{customer.ticket_count ?? 0}</td>
                     <td className="px-4 py-3 text-muted-foreground">
                       {new Date(customer.created_at).toLocaleDateString()}
                     </td>
