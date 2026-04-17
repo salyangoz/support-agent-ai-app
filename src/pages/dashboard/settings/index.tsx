@@ -104,12 +104,12 @@ export default function SettingsPage() {
     e.preventDefault()
     save({
       settings: {
-        ai_service: settings.ai_service,
-        ai_model: settings.ai_model,
+        ai_service: settings.ai_service ?? 'deepseek',
+        ai_model: settings.ai_model ?? 'deepseek-chat',
         ai_credentials: settings.ai_credentials,
-        draft_tone: settings.draft_tone,
-        default_language: settings.default_language,
-        rag_top_k: settings.rag_top_k,
+        draft_tone: settings.draft_tone ?? 'professional',
+        default_language: settings.default_language ?? 'en',
+        rag_top_k: settings.rag_top_k ?? 5,
         ai_instructions: settings.ai_instructions,
       },
     })
@@ -119,8 +119,8 @@ export default function SettingsPage() {
     e.preventDefault()
     save({
       settings: {
-        embedding_service: settings.embedding_service,
-        embedding_model: settings.embedding_model,
+        embedding_service: settings.embedding_service ?? 'chat-gpt',
+        embedding_model: settings.embedding_model ?? 'text-embedding-3-small',
         embedding_credentials: settings.embedding_credentials,
       },
     })
@@ -130,8 +130,8 @@ export default function SettingsPage() {
     e.preventDefault()
     save({
       settings: {
-        max_context_tokens: settings.max_context_tokens,
-        sync_lookback_minutes: settings.sync_lookback_minutes,
+        max_context_tokens: settings.max_context_tokens ?? 4000,
+        sync_lookback_minutes: settings.sync_lookback_minutes ?? 10,
       },
     })
   }
