@@ -214,10 +214,6 @@ export default function TicketDetailPage() {
                 <span>{ticket.input_app?.name ?? ticket.input_app?.code ?? '-'}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Language</span>
-                <span>{ticket.language ?? '-'}</span>
-              </div>
-              <div className="flex justify-between">
                 <span className="text-muted-foreground">External ID</span>
                 <span className="font-mono text-xs">{ticket.external_id}</span>
               </div>
