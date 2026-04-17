@@ -1,10 +1,10 @@
 import { useAuth } from '@/context/auth-context'
-import { LogOut, ChevronDown } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export function Header() {
-  const { user, logout, activeTenantId, setActiveTenant } = useAuth()
+  const { user, activeTenantId, setActiveTenant } = useAuth()
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -29,7 +29,7 @@ export function Header() {
   }
 
   return (
-    <header className="flex h-[var(--header-height)] items-center justify-between border-b border-border/60 bg-card px-5">
+    <header className="flex h-[var(--header-height)] items-center border-b border-border/60 bg-card px-5">
       <div className="relative" ref={menuRef}>
         <button
           onClick={() => setMenuOpen(!menuOpen)}
@@ -52,17 +52,6 @@ export function Header() {
             ))}
           </div>
         )}
-      </div>
-
-      <div className="flex items-center gap-3">
-        <span className="text-[13px] text-muted-foreground">{user?.email}</span>
-        <button
-          onClick={logout}
-          className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[13px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-        >
-          <LogOut className="h-3.5 w-3.5" />
-          Logout
-        </button>
       </div>
     </header>
   )

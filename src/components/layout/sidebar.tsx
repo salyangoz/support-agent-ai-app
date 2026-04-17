@@ -9,6 +9,7 @@ import {
   FileText,
   UserCircle,
   MessageCircle,
+  LogOut,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/context/auth-context'
@@ -30,7 +31,7 @@ const settingsNav = [
 
 export function Sidebar() {
   const { tenantId } = useParams()
-  const { activeRole } = useAuth()
+  const { activeRole, user, logout } = useAuth()
 
   const filterByRole = (items: typeof settingsNav) =>
     items.filter((item) => !item.roles || (activeRole && item.roles.includes(activeRole)))
@@ -98,6 +99,23 @@ export function Sidebar() {
               </NavLink>
             ))}
           </div>
+        </div>
+      )}
+
+      {user && (
+        <div className="flex items-center gap-2 border-t border-sidebar-border px-3 py-3">
+          <div className="min-w-0 flex-1">
+            <div className="truncate text-[13px] font-medium text-sidebar-foreground" title={user.email}>
+              {user.email}
+            </div>
+          </div>
+          <button
+            onClick={logout}
+            title="Logout"
+            className="flex items-center justify-center rounded-lg p-2 text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
+          >
+            <LogOut className="h-4 w-4" />
+          </button>
         </div>
       )}
     </aside>
