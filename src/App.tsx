@@ -18,6 +18,7 @@ import CustomersPage from '@/pages/dashboard/customers/index'
 import DraftsPage from '@/pages/dashboard/drafts/index'
 import UsersPage from '@/pages/dashboard/users/index'
 import SettingsPage from '@/pages/dashboard/settings/index'
+import AccountPage from '@/pages/dashboard/account/index'
 import ChatPage from '@/pages/dashboard/chat/index'
 import type { ReactNode } from 'react'
 
@@ -129,6 +130,7 @@ export default function App() {
               <Route path="users" element={<UsersPage />} />
               <Route path="chat" element={<ChatPage />} />
               <Route path="settings" element={<SettingsPage />} />
+              <Route path="account" element={<AccountPage />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />

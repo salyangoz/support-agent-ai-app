@@ -16,6 +16,7 @@ interface AuthContextType extends AuthState {
   logout: () => void
   setActiveTenant: (tenantId: string) => void
   createTenant: (data: CreateTenantRequest) => Promise<string>
+  refreshUser: () => Promise<string | null>
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
@@ -118,7 +119,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ ...state, login, register, logout, setActiveTenant, createTenant }}>
+    <AuthContext.Provider value={{ ...state, login, register, logout, setActiveTenant, createTenant, refreshUser: fetchMe }}>
       {children}
     </AuthContext.Provider>
   )
