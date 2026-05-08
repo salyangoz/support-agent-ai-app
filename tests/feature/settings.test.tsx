@@ -55,7 +55,7 @@ describe('Settings – General tab', () => {
     renderSettings()
 
     await waitFor(() => {
-      expect(screen.getByLabelText(/tenant name/i)).toHaveValue('Test Company')
+      expect(screen.getByLabelText(/company name/i)).toHaveValue('Test Company')
     })
   })
 
@@ -74,7 +74,7 @@ describe('Settings – General tab', () => {
     renderSettings()
 
     await waitFor(() => {
-      expect(screen.getByLabelText(/tenant name/i)).toHaveValue('Test Company')
+      expect(screen.getByLabelText(/company name/i)).toHaveValue('Test Company')
     })
 
     await user.click(screen.getByRole('button', { name: /save/i }))

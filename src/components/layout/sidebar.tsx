@@ -27,7 +27,7 @@ const mainNav = [
 
 const settingsNav = [
   { to: 'users', icon: Users, label: 'Users', roles: ['owner', 'admin'] },
-  { to: 'settings', icon: Settings, label: 'Settings', roles: ['owner', 'admin'] },
+  { to: 'settings', icon: Settings, label: 'Company Settings', roles: ['owner', 'admin'] },
 ]
 
 function getInitials(nameOrEmail: string): string {
@@ -114,16 +114,21 @@ export function Sidebar() {
 
       {user && (
         <div className="flex items-center gap-2.5 border-t border-sidebar-border px-4 py-3">
-          <span
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#fff1ea] text-[12px] font-bold text-[#f33c42]"
-            title={user.email}
+          <NavLink
+            to={`/t/${tenantId}/account`}
+            title="Account settings"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#fff1ea] text-[12px] font-bold text-[#f33c42] transition-opacity hover:opacity-80"
           >
             {getInitials(user.name || user.email)}
-          </span>
+          </NavLink>
           <div className="min-w-0 flex-1">
-            <div className="truncate text-[13px] font-medium text-sidebar-foreground" title={user.email}>
+            <NavLink
+              to={`/t/${tenantId}/account`}
+              className="block truncate text-[13px] font-medium text-sidebar-foreground hover:text-[#f33c42]"
+              title={user.email}
+            >
               {user.name || user.email}
-            </div>
+            </NavLink>
             <button
               onClick={logout}
               className="cursor-pointer text-[11px] font-medium text-muted-foreground underline underline-offset-2 transition-colors hover:text-[#f33c42]"

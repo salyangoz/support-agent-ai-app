@@ -141,7 +141,10 @@ export default function SettingsPage() {
 
   return (
     <div>
-      <PageHeader title="Settings" description="Configure your tenant and AI agent behavior" />
+      <PageHeader
+        title="Company Settings"
+        description="Company-level settings."
+      />
 
       {error && (
         <div className="mb-4 max-w-3xl rounded-md bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
@@ -162,14 +165,15 @@ export default function SettingsPage() {
                   <div className="rounded-md bg-success/10 p-3 text-sm text-success">Settings saved successfully.</div>
                 )}
                 <div className="space-y-2">
-                  <Label htmlFor="name">Tenant Name</Label>
+                  <Label htmlFor="name">Company name</Label>
                   <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
+                  <p className="text-xs text-muted-foreground">Shown across the dashboard and on outgoing replies.</p>
                 </div>
                 {tenant?.api_key && (
                   <div className="space-y-2">
-                    <Label>API Key</Label>
+                    <Label>Company API key</Label>
                     <Input value={tenant.api_key} readOnly className="font-mono text-xs" />
-                    <p className="text-xs text-muted-foreground">Use this key for machine-to-machine API access</p>
+                    <p className="text-xs text-muted-foreground">For machine-to-machine access. Treat it like a password.</p>
                   </div>
                 )}
                 <div className="space-y-3 border-t pt-4">
