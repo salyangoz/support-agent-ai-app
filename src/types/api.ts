@@ -149,6 +149,8 @@ export interface Draft {
   status: 'pending' | 'approved' | 'rejected' | 'sent'
   reviewed_by: string | null
   reviewed_at: string | null
+  similarity_score: number | null
+  compared_message_id: string | null
   created_at: string
 }
 

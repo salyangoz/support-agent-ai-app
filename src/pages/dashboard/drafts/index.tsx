@@ -4,6 +4,7 @@ import { Send } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
+import { SimilarityScore } from '@/components/ui/similarity-score'
 import { PageHeader } from '@/components/layout/page-header'
 import { Spinner } from '@/components/ui/spinner'
 import { tokens } from '@/lib/design-tokens'
@@ -75,6 +76,7 @@ export default function DraftsPage() {
                   >
                     {draft.status}
                   </Badge>
+                  <SimilarityScore score={draft.similarity_score} />
                   <Link
                     to={`/t/${tenantId}/tickets/${draft.ticket_id}`}
                     className="text-sm text-brand-600 hover:underline"
