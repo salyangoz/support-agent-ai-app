@@ -102,6 +102,7 @@ export interface Ticket {
   last_message_at?: string | null
   last_message_by?: string | null
   last_message_role?: string | null
+  last_message_preview?: string | null
   customer_email?: string | null
   customer_name?: string | null
   customer?: Customer

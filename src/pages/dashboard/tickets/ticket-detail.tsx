@@ -9,6 +9,7 @@ import { PageHeader } from '@/components/layout/page-header'
 import { Spinner } from '@/components/ui/spinner'
 import { tokens } from '@/lib/design-tokens'
 import { sanitizeHtml } from '@/lib/sanitize-html'
+import { ticketTitle } from '@/lib/ticket-title'
 import api from '@/lib/api'
 import type { Ticket, Draft, Message } from '@/types/api'
 
@@ -78,7 +79,7 @@ export default function TicketDetailPage() {
   return (
     <div>
       <PageHeader
-        title={ticket.subject ?? `Ticket ${ticket.external_id}`}
+        title={ticketTitle(ticket)}
         actions={
           <div className="flex gap-2">
             <Link to={`/t/${tenantId}/tickets`}>

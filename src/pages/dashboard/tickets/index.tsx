@@ -6,6 +6,7 @@ import { Select } from '@/components/ui/select'
 import { PageHeader } from '@/components/layout/page-header'
 import { Spinner } from '@/components/ui/spinner'
 import { tokens } from '@/lib/design-tokens'
+import { ticketTitle } from '@/lib/ticket-title'
 import api from '@/lib/api'
 import type { Ticket, PaginatedResponse } from '@/types/api'
 
@@ -78,7 +79,7 @@ export default function TicketsPage() {
                         to={`/t/${tenantId}/tickets/${ticket.id}`}
                         className="font-medium text-brand-600 hover:underline"
                       >
-                        {ticket.subject ?? ticket.external_id}
+                        {ticketTitle(ticket)}
                       </Link>
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
