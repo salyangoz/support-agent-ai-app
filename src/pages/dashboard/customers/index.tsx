@@ -1,20 +1,59 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
-import { Pencil } from 'lucide-react'
+import { Pencil, Download, Upload } from 'lucide-react'
+import { read, utils, writeFile } from 'xlsx'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { PageHeader } from '@/components/layout/page-header'
 import { Spinner } from '@/components/ui/spinner'
+import { useToast } from '@/components/ui/toast'
+import { extractErrorMessage } from '@/lib/error-message'
 import api from '@/lib/api'
 import type { Customer, PaginatedResponse } from '@/types/api'
 
+interface BulkImportRow {
+  id?: string | null
+  external_id?: string | null
+  email?: string | null
+  name?: string | null
+  phone?: string | null
+}
+
+interface BulkImportResult {
+  created: number
+  updated: number
+  errors: Array<{ row: number; message: string }>
+}
+
+const EXPORT_PAGE_SIZE = 500
+
+// Find a value in a row by trying multiple column names (case-insensitive).
+// Lets users keep their own column headers in Turkish/English variants.
+function pickField(row: Record<string, unknown>, candidates: string[]): string {
+  const normalized = new Map<string, unknown>()
+  for (const [k, v] of Object.entries(row)) {
+    normalized.set(k.trim().toLowerCase(), v)
+  }
+  for (const key of candidates) {
+    const v = normalized.get(key.toLowerCase())
+    if (v !== undefined && v !== null && String(v).trim() !== '') {
+      return String(v).trim()
+    }
+  }
+  return ''
+}
+
 export default function CustomersPage() {
   const { tenantId } = useParams()
+  const queryClient = useQueryClient()
+  const { toast } = useToast()
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
   const [editing, setEditing] = useState<Customer | null>(null)
+  const [isExporting, setIsExporting] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const { data, isLoading } = useQuery({
     queryKey: ['customers', tenantId, search, page],
@@ -26,9 +65,121 @@ export default function CustomersPage() {
         .then((r) => r.data),
   })
 
+  const importMutation = useMutation({
+    mutationFn: (rows: BulkImportRow[]) =>
+      api
+        .post<BulkImportResult>(`/tenants/${tenantId}/customers/bulk`, { customers: rows })
+        .then((r) => r.data),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({ queryKey: ['customers', tenantId] })
+      const errLabel = result.errors.length ? `, ${result.errors.length} errors` : ''
+      const variant = result.errors.length > 0 ? 'info' : 'success'
+      toast(`Imported ${result.created} new, ${result.updated} updated${errLabel}`, variant)
+      if (result.errors.length) {
+        const sample = result.errors.slice(0, 3).map((e) => `row ${e.row}: ${e.message}`).join(' · ')
+        toast(`Failed rows — ${sample}${result.errors.length > 3 ? ' …' : ''}`, 'error')
+      }
+    },
+    onError: (err) => toast(extractErrorMessage(err, 'Import failed'), 'error'),
+  })
+
+  const handleExport = async () => {
+    if (!tenantId) return
+    setIsExporting(true)
+    try {
+      const all: Customer[] = []
+      for (let p = 1; ; p++) {
+        const { data: pageData } = await api.get<PaginatedResponse<Customer>>(
+          `/tenants/${tenantId}/customers`,
+          { params: { page: p, limit: EXPORT_PAGE_SIZE } },
+        )
+        all.push(...pageData.data)
+        if (pageData.data.length < EXPORT_PAGE_SIZE) break
+      }
+      if (!all.length) {
+        toast('No customers to export', 'info')
+        return
+      }
+      const rows = all.map((c) => ({
+        id: c.id,
+        external_id: c.external_id ?? '',
+        name: c.name ?? '',
+        email: c.email ?? '',
+        phone: c.phone ?? '',
+      }))
+      const ws = utils.json_to_sheet(rows, { header: ['id', 'external_id', 'name', 'email', 'phone'] })
+      const wb = utils.book_new()
+      utils.book_append_sheet(wb, ws, 'Customers')
+      const stamp = new Date().toISOString().slice(0, 10)
+      writeFile(wb, `customers-${stamp}.xlsx`)
+    } catch (err) {
+      toast(extractErrorMessage(err, 'Export failed'), 'error')
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleImportFile = async (file: File) => {
+    try {
+      const buf = await file.arrayBuffer()
+      const wb = read(buf, { type: 'array' })
+      const sheet = wb.Sheets[wb.SheetNames[0]]
+      if (!sheet) {
+        toast('No sheet found in file', 'error')
+        return
+      }
+      const rawRows = utils.sheet_to_json<Record<string, unknown>>(sheet, { raw: false, defval: '' })
+      if (!rawRows.length) {
+        toast('Spreadsheet is empty', 'info')
+        return
+      }
+      const rows: BulkImportRow[] = rawRows.map((r) => ({
+        id: pickField(r, ['id']) || null,
+        external_id: pickField(r, ['external_id', 'externalId']) || null,
+        email: pickField(r, ['email', 'e-mail', 'eposta']) || null,
+        name: pickField(r, ['name', 'isim', 'ad soyad', 'fullname']) || null,
+        phone: pickField(r, ['phone', 'mobile', 'telefon', 'gsm']) || null,
+      }))
+      importMutation.mutate(rows)
+    } catch (err) {
+      toast(extractErrorMessage(err, 'Could not read spreadsheet'), 'error')
+    }
+  }
+
   return (
     <div>
-      <PageHeader title="Customers" description="View customers from your connected support apps" />
+      <PageHeader
+        title="Customers"
+        description="View customers from your connected support apps"
+        actions={
+          <div className="flex gap-2">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".xlsx,.xls,.csv"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (file) handleImportFile(file)
+                e.target.value = ''
+              }}
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={importMutation.isPending}
+            >
+              <Upload className="mr-2 h-4 w-4" />
+              {importMutation.isPending ? 'Importing…' : 'Import'}
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleExport} disabled={isExporting}>
+              <Download className="mr-2 h-4 w-4" />
+              {isExporting ? 'Exporting…' : 'Export'}
+            </Button>
+          </div>
+        }
+      />
       <div className="mb-4">
         <Input
           placeholder="Search by email..."
