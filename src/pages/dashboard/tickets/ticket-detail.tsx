@@ -10,6 +10,8 @@ import { Spinner } from '@/components/ui/spinner'
 import { tokens } from '@/lib/design-tokens'
 import { sanitizeHtml } from '@/lib/sanitize-html'
 import { ticketTitle } from '@/lib/ticket-title'
+import { extractErrorMessage } from '@/lib/error-message'
+import { useToast } from '@/components/ui/toast'
 import api from '@/lib/api'
 import type { Ticket, Draft, Message } from '@/types/api'
 
@@ -23,6 +25,7 @@ const draftColors = tokens.colors.draft
 export default function TicketDetailPage() {
   const { tenantId, ticketId } = useParams()
   const queryClient = useQueryClient()
+  const { toast } = useToast()
 
   const { data: ticketData, isLoading } = useQuery({
     queryKey: ['ticket', tenantId, ticketId],
@@ -57,6 +60,7 @@ export default function TicketDetailPage() {
   const generateDraft = useMutation({
     mutationFn: () => api.post(`/tenants/${tenantId}/tickets/${ticketId}/draft`),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['ticket-drafts', tenantId, ticketId] }),
+    onError: (err) => toast(extractErrorMessage(err, 'Failed to generate draft'), 'error'),
   })
 
   const reviewDraft = useMutation({
