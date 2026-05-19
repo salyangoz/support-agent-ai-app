@@ -8,6 +8,8 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { PageHeader } from '@/components/layout/page-header'
 import { Spinner } from '@/components/ui/spinner'
+import { useToast } from '@/components/ui/toast'
+import { extractErrorMessage } from '@/lib/error-message'
 import api from '@/lib/api'
 import type { KnowledgeArticle, PaginatedResponse, EmbeddingStatus } from '@/types/api'
 import KnowledgeArticleModal from './article-modal'
@@ -41,6 +43,7 @@ function EmbeddingBadge({ status }: { status?: EmbeddingStatus }) {
 export default function KnowledgeBasePage() {
   const { tenantId } = useParams()
   const queryClient = useQueryClient()
+  const { toast } = useToast()
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
   const [editingArticle, setEditingArticle] = useState<KnowledgeArticle | null>(null)
@@ -71,6 +74,7 @@ export default function KnowledgeBasePage() {
         `/tenants/${tenantId}/knowledge-articles/${id}/embed`,
       ),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['knowledge-articles', tenantId] }),
+    onError: (err) => toast(extractErrorMessage(err, 'Failed to embed article'), 'error'),
   })
 
   const embedAllMutation = useMutation({
@@ -79,6 +83,7 @@ export default function KnowledgeBasePage() {
         `/tenants/${tenantId}/knowledge-articles/embed`,
       ),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['knowledge-articles', tenantId] }),
+    onError: (err) => toast(extractErrorMessage(err, 'Failed to embed articles'), 'error'),
   })
 
   const generateFromTicketsMutation = useMutation({
